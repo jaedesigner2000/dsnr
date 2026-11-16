@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DSNR | Jae Designer — AI Video Ads, UGC & Animation</title>
 <meta name="description" content="DSNR is the creative studio of Jae Designer (Lumbani Jere): AI video ads, UGC content, Pixar-style animation and brand design.">
+<link rel="canonical" href="https://jaedesigner2000.github.io/dsnr/">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DSNR">
+<meta property="og:title" content="DSNR | Jae Designer — AI Video Ads, UGC & Animation">
+<meta property="og:description" content="AI video ads, UGC content, Pixar-style animation and brand design by Jae Designer (Lumbani Jere), founder of DSNR.">
+<meta property="og:url" content="https://jaedesigner2000.github.io/dsnr/">
+<meta property="og:image" content="https://jaedesigner2000.github.io/dsnr/assets/photo.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Lumbani Jere","alternateName":"Jae Designer","jobTitle":"Graphic Designer and AI Content Creator","url":"https://jaedesigner2000.github.io/dsnr/","image":"https://jaedesigner2000.github.io/dsnr/assets/photo.jpg","address":{"@type":"PostalAddress","addressLocality":"Blantyre","addressCountry":"MW"},"worksFor":{"@type":"Organization","name":"DSNR"},"knowsAbout":["AI video ads","UGC content","Pixar-style animation","Brand identity design","Logo design","Video editing"],"sameAs":["https://www.linkedin.com/in/lumbani-jere-","https://www.instagram.com/jae_designer","https://www.upwork.com/freelancers/~01d9ba420fcd5097a8"]}</script>
 <link rel="icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,7 +96,7 @@ main{position:relative}
   -webkit-mask-image:linear-gradient(to top,transparent 0,#000 30%);mask-image:linear-gradient(to top,transparent 0,#000 30%)}
 .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;filter:grayscale(1) contrast(1.12) brightness(.62);
   -webkit-mask-image:linear-gradient(to right,transparent 26%,#000 52%);mask-image:linear-gradient(to right,transparent 26%,#000 52%)}
-.hero-photo canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero>canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .hero .wrap{position:relative;z-index:1}
 .hero-in{max-width:520px}
 .chip{display:inline-flex;align-items:center;gap:10px;margin-bottom:26px}
@@ -193,7 +203,7 @@ main{position:relative}
 .step p{color:var(--muted);font-size:14px}
 
 /* ---------- reviews ---------- */
-.reviews{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.reviews{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
 .review{perspective:1000px;transition:opacity .9s var(--ease),transform 1s var(--ease)}
 .review.reveal:nth-child(odd){transform:translateX(-46px)}
 .review.reveal:nth-child(even){transform:translateX(46px);transition-delay:.12s}
@@ -470,6 +480,7 @@ footer.site .soc svg{width:14px;height:14px}
     <div class="wrap">
       <div class="sec-head reveal"><div><div class="eyebrow">Reviews</div><h2>Happy <em>clients.</em></h2></div></div>
       <div class="reviews" id="reviewList"></div>
+      <div class="pager" id="reviewPager"></div>
     </div>
   </section>
 
@@ -685,17 +696,29 @@ $('#chips').addEventListener('click', e => { const b = e.target.closest('.chipb'
 renderGrid();
 
 /* ---------- reviews, software ---------- */
-$('#reviewList').innerHTML = REVIEWS.map(r => `
+/* reviews: two at a time, with pages */
+const rlist = $('#reviewList'), rpager = $('#reviewPager'), RPER = 2; let rpage = 0;
+function renderReviews(first){
+  const pages = Math.max(1, Math.ceil(REVIEWS.length / RPER)); rpage = Math.max(0, Math.min(rpage, pages - 1));
+  rlist.innerHTML = REVIEWS.slice(rpage * RPER, rpage * RPER + RPER).map(r => `
   <figure class="review reveal"><div class="review-in glow">
     <span class="q" aria-hidden="true">”</span>
     <div class="stars" aria-label="5 out of 5 stars">${[0,1,2,3,4].map(i => `<svg style="--i:${i}"><use href="#i-star"/></svg>`).join('')}</div>
     <blockquote>${r.text}</blockquote>
     <footer><i>✓</i>Verified client</footer>
   </div></figure>`).join('');
-$$('.review').forEach(el => {
-  const inner = $('.review-in', el); tilt(el, inner, 5);
-  el.addEventListener('pointermove', e => { const r = inner.getBoundingClientRect(); inner.style.setProperty('--mx', (e.clientX - r.left) + 'px'); inner.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
-});
+  $$('.review', rlist).forEach(el => {
+    const inner = $('.review-in', el); tilt(el, inner, 5);
+    el.addEventListener('pointermove', e => { const r = inner.getBoundingClientRect(); inner.style.setProperty('--mx', (e.clientX - r.left) + 'px'); inner.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
+  });
+  if (!first) setTimeout(() => $$('.review', rlist).forEach(el => el.classList.add('in')), 40);
+  rpager.style.display = pages > 1 ? '' : 'none';
+  rpager.innerHTML = `<button data-p="${rpage - 1}" ${rpage === 0 ? 'disabled' : ''} aria-label="Previous reviews"><svg><use href="#i-left"/></svg></button>` +
+    Array.from({length: pages}, (_, i) => `<button data-p="${i}" class="${i === rpage ? 'on' : ''}" aria-label="Reviews page ${i + 1}">${i + 1}</button>`).join('') +
+    `<button data-p="${rpage + 1}" ${rpage >= pages - 1 ? 'disabled' : ''} aria-label="Next reviews"><svg><use href="#i-right"/></svg></button>`;
+}
+rpager.addEventListener('click', e => { const b = e.target.closest('button'); if (!b || b.disabled) return; rpage = +b.dataset.p; renderReviews(); });
+renderReviews(true);
 $('#skills').innerHTML = SOFTWARE.map(s => `
   <div class="skill glow reveal" style="--c:${s.c};--v:${s.v}%;${s.tile ? `--tile:${s.tile};` : ''}${s.pad ? `--lp:${s.pad};` : ''}">
     <div class="logo"><img src="assets/logo-${s.logo}" alt="${s.name} logo" loading="lazy"></div>
@@ -784,44 +807,53 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && pw.classList.contai
   tilt(ph.parentElement, ph, 6);
 }
 
-/* ---------- welcome photo: breaks into drifting triangles toward the text ---------- */
+/* ---------- welcome photo: its edge breaks into large triangles that drift across the page, clear of the face ---------- */
 {
   const hero = $('#hero'), hp = $('.hero-photo'), im = $('img', hp), cv = document.createElement('canvas'), cx = cv.getContext('2d');
-  hp.appendChild(cv);
-  let W = 0, H = 0, tris = [], mx = -9999, my = -9999, live = false, raf = 0;
+  hero.appendChild(cv);
+  let HW = 0, HH = 0, tris = [], mx = -9999, my = -9999, live = false, raf = 0;
   const sm = (a, b, x) => { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); };
   function build(){
-    W = hp.clientWidth; H = hp.clientHeight; if (!W || !H || !im.naturalWidth) return;
-    const Z = W < 700 ? .34 : .43, dpr = Math.min(devicePixelRatio || 1, 2);
-    cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const m = `linear-gradient(to right,transparent ${Z * 41}%,#000 ${Z * 81}%)`; im.style.webkitMaskImage = m; im.style.maskImage = m;
+    const W = hp.clientWidth, H = hp.clientHeight, ox = hp.offsetLeft; HW = hero.clientWidth; HH = hero.clientHeight;
+    if (!W || !H || !im.naturalWidth) return;
+    const small = HW < 700, Z = small ? .15 : .24, dpr = Math.min(devicePixelRatio || 1, 2);   /* Z: share of the photo that breaks up; the face starts further right */
+    cv.width = HW * dpr; cv.height = HH * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const m = `linear-gradient(to right,transparent ${Z * 30}%,#000 ${Z * 92}%)`; im.style.webkitMaskImage = m; im.style.maskImage = m;
     const k = 6, sw = Math.ceil(W / k), sh = Math.ceil(H / k), oc = document.createElement('canvas'); oc.width = sw; oc.height = sh;
     const o = oc.getContext('2d', {willReadFrequently:true}), sc = Math.max(W / im.naturalWidth, H / im.naturalHeight), dw = im.naturalWidth * sc, dh = im.naturalHeight * sc;
     o.drawImage(im, (W - dw) * .5 / k, (H - dh) * .18 / k, dw / k, dh / k);
     let px; try { px = o.getImageData(0, 0, sw, sh).data; } catch (e) { return; }
-    const s = Math.max(20, Math.min(36, W / 26)), h = s * .866; tris = [];
+    const grey = (x, y) => { const pi = (Math.min(sh - 1, Math.max(0, y / k | 0)) * sw + Math.min(sw - 1, Math.max(0, x / k | 0))) * 4, lum = (.299 * px[pi] + .587 * px[pi + 1] + .114 * px[pi + 2]) / 255;
+      return Math.max(26, Math.min(255, (((lum - .5) * 1.12 + .5) * .62 + (Math.random() - .5) * .04) * 255)) | 0; };
+    const s = small ? 34 : Math.max(46, Math.min(74, W / 13)), h = s * .866; tris = [];
+    const shape = (up, s, h) => up ? [-s / 2, h / 3, 0, -h * 2 / 3, s / 2, h / 3] : [-s / 2, -h / 3, s / 2, -h / 3, 0, h * 2 / 3];
     for (let r = 0; r * h < H; r++) for (let i = 0; ; i++) {
       const x0 = i * s / 2 - s / 2, up = (i + r) % 2 === 0, tx = x0 + s / 2, ty = r * h + (up ? h * 2 / 3 : h / 3), u = tx / W / Z;
       if (u > 1) break;
-      const appear = sm(1, .72, u), e = sm(.66, .02, u), r1 = Math.random(), r2 = Math.random();
-      if (r1 > Math.pow(appear, 1.7) || r2 > 1 - e * .72) continue;
-      const pi = (Math.min(sh - 1, ty / k | 0) * sw + Math.min(sw - 1, Math.max(0, tx / k | 0))) * 4;
-      const lum = (.299 * px[pi] + .587 * px[pi + 1] + .114 * px[pi + 2]) / 255;
-      const v = Math.max(0, Math.min(255, (((lum - .5) * 1.12 + .5) * .62 + (Math.random() - .5) * .035) * 255)) | 0;
-      const pts = up ? [-s / 2, h / 3, 0, -h * 2 / 3, s / 2, h / 3] : [-s / 2, -h / 3, s / 2, -h / 3, 0, h * 2 / 3];
-      tris.push({x:tx, y:ty, pts, e, a:Math.pow(1 - e, 1.25) * Math.min(1, appear * 1.3), col:`rgb(${v},${v},${v})`, r1:Math.random(), r2:Math.random(), ph:Math.random() * 6.283});
+      const appear = sm(1.02, .7, u), e = sm(.7, .0, u), r1 = Math.random(), r2 = Math.random();
+      if (r1 > Math.pow(appear, 1.5) || r2 > .82 - e * .5) continue;
+      const v = grey(tx, ty), fadeY = 1 - sm(.62, .96, ty / H);
+      tris.push({x:ox + tx, y:ty, pts:shape(up, s, h), e, a:Math.pow(1 - e * .8, 1.2) * Math.min(1, appear * 1.4) * fadeY, col:`rgb(${v},${v},${v})`, r1:Math.random(), r2:Math.random(), ph:Math.random() * 6.283});
+    }
+    /* a few fragments that made it all the way across the page */
+    const far = small ? 6 : 15;
+    for (let i = 0; i < far; i++) {
+      const fs = s * (.45 + Math.random() * .75), fh = fs * .866, v = grey(Math.random() * W * Z, Math.random() * H);
+      tris.push({far:true, x:HW * .02 + Math.random() * Math.max(60, ox - HW * .02), y:HH * (.1 + Math.random() * .8), pts:shape(Math.random() < .5, fs, fh), e:1, a:.1 + Math.random() * .3,
+        col:`rgb(${v},${v},${v})`, r1:Math.random(), r2:Math.random(), ph:Math.random() * 6.283});
     }
     draw(performance.now());
   }
   function draw(t){
-    cx.clearRect(0, 0, W, H); cx.lineWidth = .6; cx.strokeStyle = 'rgba(255,255,255,.07)';
+    cx.clearRect(0, 0, HW, HH); cx.lineWidth = .7; cx.strokeStyle = 'rgba(255,255,255,.08)';
     for (const q of tris) {
       const e = q.e;
-      let dx = -e * e * (36 + q.r1 * 150) + Math.sin(t * .0005 + q.ph) * e * 13,
-          dy = (q.r2 - .62) * e * e * 96 + Math.cos(t * .0004 + q.ph) * e * 11,
-          rot = e * (q.r2 - .5) * 2.6 + Math.sin(t * .0003 + q.ph) * e * .55, sc = 1.02 - e * (.3 + .5 * q.r1);
+      let dx, dy, rot, sc;
+      if (q.far) { dx = Math.sin(t * .00022 + q.ph) * 26; dy = Math.cos(t * .00018 + q.ph) * 20; rot = q.ph + t * .00012 * (q.r1 - .5) * 2; sc = 1; }
+      else { dx = -e * e * (50 + q.r1 * 240) + Math.sin(t * .0005 + q.ph) * e * 14; dy = (q.r2 - .6) * e * e * 130 + Math.cos(t * .0004 + q.ph) * e * 12;
+             rot = e * (q.r2 - .5) * 2.6 + Math.sin(t * .0003 + q.ph) * e * .5; sc = 1.02 - e * (.25 + .45 * q.r1); }
       const ddx = q.x + dx - mx, ddy = q.y + dy - my, d = Math.hypot(ddx, ddy);
-      if (d < 170) { const f = (1 - d / 170) ** 2 * 54 * (.22 + e); dx += ddx / (d || 1) * f; dy += ddy / (d || 1) * f; rot += f * .025; }
+      if (d < 180 && e > .05) { const f = (1 - d / 180) ** 2 * 46 * e; dx += ddx / (d || 1) * f - Math.max(0, ddx / (d || 1)) * f; dy += ddy / (d || 1) * f; rot += f * .02; }   /* never pushed toward the face */
       const c = Math.cos(rot) * sc, s = Math.sin(rot) * sc, p = q.pts, X = q.x + dx, Y = q.y + dy;
       cx.globalAlpha = q.a; cx.fillStyle = q.col; cx.beginPath();
       cx.moveTo(X + p[0] * c - p[1] * s, Y + p[0] * s + p[1] * c);
@@ -836,7 +868,7 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && pw.classList.contai
   let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(build, 180); });
   if (!reduced) {
     new IntersectionObserver(es => { const on = es[0].isIntersecting; if (on && !live) { live = true; raf = requestAnimationFrame(loop); } else if (!on) { live = false; cancelAnimationFrame(raf); } }).observe(hero);
-    hero.addEventListener('pointermove', e => { const r = hp.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
+    hero.addEventListener('pointermove', e => { const r = hero.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; });
     hero.addEventListener('pointerleave', () => { mx = my = -9999; });
   }
 }
