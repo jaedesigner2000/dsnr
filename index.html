@@ -18,7 +18,7 @@
 <link rel="icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Montserrat:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Montserrat:wght@900&family=Caveat:wght@600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#131315;
@@ -92,7 +92,7 @@ main{position:relative}
 .hero::before{content:"";position:absolute;inset:0;background-image:var(--grid);
   background-size:84px 84px;-webkit-mask-image:radial-gradient(70% 70% at 12% 18%,#000 0,transparent 70%);mask-image:radial-gradient(70% 70% at 12% 18%,#000 0,transparent 70%)}
 .hero::after{content:"";position:absolute;inset:0;background:radial-gradient(50% 60% at 0% 0%,rgba(40,70,120,.22),transparent 70%);pointer-events:none}
-.hero-photo{position:absolute;inset:0;pointer-events:none}
+.hero-photo{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 /* large portrait cut down the middle by the right edge of the page; black studio background melts into the page */
 .hero-photo img{position:absolute;--s:min(135vh,150vw);width:var(--s);height:var(--s);max-width:none;left:calc(100% - var(--s)/2);top:calc(48% - var(--s)*.45);
   mix-blend-mode:screen;filter:grayscale(1) contrast(1.06);
@@ -114,22 +114,31 @@ main{position:relative}
 .no-anim .rise{animation:none;opacity:1;transform:none}
 @keyframes rise{to{opacity:1;transform:none}}
 
+/* ---------- hand-drawn scroll cue ---------- */
+.scrollcue{position:absolute;z-index:3;left:max(var(--pad),calc((100% - 1200px)/2 + var(--pad)));bottom:clamp(14px,3.5vh,40px);display:flex;align-items:flex-end;gap:6px;color:#e9e9ec;cursor:pointer;
+  animation:cuefloat 3.2s ease-in-out infinite}
+.scrollcue span{font:600 clamp(22px,1.9vw,27px)/1 "Caveat",cursive;letter-spacing:.01em;transform:rotate(-4deg) translateY(-30px);transform-origin:left bottom;transition:color .3s,transform .5s var(--ease)}
+.scrollcue svg{width:78px;height:96px;overflow:visible;transition:transform .6s cubic-bezier(.3,1.6,.5,1)}
+.scrollcue path{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:var(--len);stroke-dashoffset:0;transition:stroke .3s}
+.scrollcue:hover{animation-play-state:paused;color:var(--pink)}
+.scrollcue:hover span{transform:rotate(-7deg) translateY(-34px) scale(1.06)}
+.scrollcue:hover svg{transform:translateY(10px) rotate(6deg)}
+.scrollcue:hover path{animation:cuedraw 1s var(--ease) both}
+.scrollcue:hover path.head{animation-delay:.55s}
+@keyframes cuedraw{from{stroke-dashoffset:var(--len)}to{stroke-dashoffset:0}}
+@keyframes cuefloat{0%,100%{translate:0 0}50%{translate:0 -9px}}
+
 /* ---------- video scenes ---------- */
-.scene{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;overflow:hidden;--neon:var(--pink)}
-.scene+.scene{margin-top:-6vh}
-.amb{position:absolute;top:0;bottom:0;width:78vw;background:var(--neon);opacity:0;pointer-events:none;
-  transition:opacity 1.2s var(--ease),background-color 1.4s linear}
-.scene.left .amb{left:-8vw;-webkit-mask-image:radial-gradient(ellipse 50% 46% at 42% 50%,#000 0,transparent 100%);mask-image:radial-gradient(ellipse 50% 46% at 42% 50%,#000 0,transparent 100%)}
-.scene.right .amb{right:-8vw;-webkit-mask-image:radial-gradient(ellipse 50% 46% at 58% 50%,#000 0,transparent 100%);mask-image:radial-gradient(ellipse 50% 46% at 58% 50%,#000 0,transparent 100%)}
-.scene.in .amb{opacity:.3}
+.scene{position:relative;min-height:max(520px,72vh);display:flex;align-items:center;overflow:hidden;--neon:var(--pink)}
+.scene+.scene{margin-top:0}
 .vid{position:absolute;top:0;bottom:0;width:66vw;opacity:0;transform:scale(1.04);transition:opacity 1.1s var(--ease),transform 1.6s var(--ease);
-  -webkit-mask-composite:source-in;mask-composite:intersect;clip-path:inset(4px)}
+  -webkit-mask-composite:source-in;mask-composite:intersect;clip-path:inset(14px 4px)}
 .scene.in .vid{opacity:1;transform:none}
 .vid video{width:100%;height:100%;object-fit:cover}
 .scene.left .vid{left:0;-webkit-mask-image:linear-gradient(to right,var(--fside)),var(--fy);mask-image:linear-gradient(to right,var(--fside)),var(--fy)}
 .scene.right .vid{right:0;-webkit-mask-image:linear-gradient(to left,var(--fside)),var(--fy);mask-image:linear-gradient(to left,var(--fside)),var(--fy)}
 @media (min-width:981px){
-  .scene .vid.portrait{--pw:min(48vw,72vh);width:var(--pw);-webkit-mask-image:linear-gradient(to right,var(--fboth)),var(--fy);mask-image:linear-gradient(to right,var(--fboth)),var(--fy)}
+  .scene .vid.portrait{--pw:min(44vw,52vh);width:var(--pw);-webkit-mask-image:linear-gradient(to right,var(--fboth)),var(--fy);mask-image:linear-gradient(to right,var(--fboth)),var(--fy)}
   .scene.left .vid.portrait{left:max(0px,calc(28vw - var(--pw)/2))}
   .scene.right .vid.portrait{right:max(0px,calc(28vw - var(--pw)/2))}
 }
@@ -140,7 +149,7 @@ main{position:relative}
 .scene .wrap{position:relative;z-index:2;display:flex}
 .scene.left .wrap{justify-content:flex-end}
 .scene.right .wrap{justify-content:flex-start}
-.scene-text{width:min(400px,38vw);opacity:0;transform:translateY(26px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
+.scene-text{width:min(440px,40vw);opacity:0;transform:translateY(26px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
 .scene.in .scene-text{opacity:1;transform:none}
 .num{display:flex;align-items:flex-end;gap:14px;margin:0 0 6px -4px;font-size:clamp(84px,10.5vw,160px);line-height:.82;letter-spacing:-.05em;user-select:none}
 .num b{position:relative;font-weight:700;font-variant-numeric:tabular-nums;color:transparent;-webkit-text-stroke:1.2px var(--neon);transition:-webkit-text-stroke-color 1.4s linear;
@@ -152,7 +161,7 @@ main{position:relative}
 .scene.in .num span::before{width:46px}
 .scene h2{font-size:clamp(28px,3.4vw,46px);margin-bottom:16px}
 .scene h2 em{color:var(--neon);transition:color 1.4s linear}
-.scene p{font-size:clamp(15px,1.2vw,17px);font-weight:300;color:var(--soft)}
+.scene p{font-size:clamp(14.5px,1.1vw,16px);font-weight:300;color:var(--soft)}
 
 /* ---------- generic sections ---------- */
 .sec{scroll-margin-top:80px;position:relative;padding:clamp(70px,9vw,130px) 0}
@@ -330,11 +339,10 @@ footer.site .soc svg{width:14px;height:14px}
 @media (max-width:980px){
   .nav .links{display:none}
   .hero-photo img{opacity:.5}
-  .scene{align-items:flex-end;padding-bottom:10vh}
-  .scene .vid,.scene.left .vid,.scene.right .vid{width:100%;left:0;right:0;bottom:auto;height:70vh;-webkit-mask-composite:source-over;mask-composite:add;
+  .scene{align-items:flex-end;min-height:auto;padding:46vh 0 7vh}
+  .scene .vid,.scene.left .vid,.scene.right .vid{width:100%;left:0;right:0;bottom:auto;height:56vh;clip-path:inset(10px 0);-webkit-mask-composite:source-over;mask-composite:add;
     -webkit-mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.5) 7%,#000 16%,#000 42%,rgba(0,0,0,.72) 58%,rgba(0,0,0,.32) 76%,rgba(0,0,0,.08) 91%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.5) 7%,#000 16%,#000 42%,rgba(0,0,0,.72) 58%,rgba(0,0,0,.32) 76%,rgba(0,0,0,.08) 91%,transparent 100%)}
   .num{font-size:92px}
-  .amb,.scene.left .amb,.scene.right .amb{width:120vw;left:-10vw;right:auto}
   .scene-text{width:100%}
   .grid{grid-template-columns:1fr 1fr}
   .steps{grid-template-columns:1fr 1fr}
@@ -348,9 +356,9 @@ footer.site .soc svg{width:14px;height:14px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
+  .scrollcue{animation:none}
   .reveal,.rise,.card,.scene .vid,.scene .scene-text,.pw-item,.review.reveal:nth-child(n){opacity:1;transform:none;transition:none;animation:none}
   .stars svg{opacity:1;transform:none;transition:none}
-  .scene .amb{opacity:.3}
 }
 </style>
 </head>
@@ -403,45 +411,48 @@ footer.site .soc svg{width:14px;height:14px}
         </div>
       </div>
     </div>
+    <a class="scrollcue" href="#work" aria-label="Scroll down to see the work">
+      <svg viewBox="0 0 78 96" aria-hidden="true">
+        <path class="line" style="--len:190" d="M8 6c18 2 34 12 30 26-3 10-17 9-17 0 0-11 20-14 30-4 9 9 9 30 4 52"/>
+        <path class="head" style="--len:40" d="M42 70c3 5 8 10 13 15 3-7 9-12 15-15"/>
+      </svg>
+      <span>scroll to see the work</span>
+    </a>
   </header>
 
   <!-- ================= WHAT I DO (video scenes) =================
        Videos live in assets/ with these exact names. -->
   <div id="work">
     <section class="scene left">
-      <div class="amb"></div>
       <div class="vid"><video muted loop playsinline preload="none" data-src="assets/ai-commercial-ads.mp4"></video><div class="ph"><span>assets/ai-commercial-ads.mp4</span></div></div>
       <div class="wrap"><div class="scene-text">
         <div class="num" aria-hidden="true"><b data-f="01" data-n="01">01</b><span>of 04</span></div>
         <h2>AI Commercial <em>Ads</em></h2>
-        <p>Product ads, brand films and short-form commercials made with 100% AI tools. Every frame is art-directed, refined and composited with a trained eye, built to hold attention and sell.</p>
+        <p>We create high-impact product ads, brand films, and short-form commercials using 100% AI-powered workflows. From concept development to final production, we combine advanced AI tools with professional art direction, visual storytelling, and creative refinement to produce captivating adverts designed to grab attention, elevate brands, and drive sales.</p>
       </div></div>
     </section>
     <section class="scene right">
-      <div class="amb"></div>
       <div class="vid"><video muted loop playsinline preload="none" data-src="assets/pixar-animation.mp4"></video><div class="ph"><span>assets/pixar-animation.mp4</span></div></div>
       <div class="wrap"><div class="scene-text">
         <div class="num" aria-hidden="true"><b data-f="02" data-n="02">02</b><span>of 04</span></div>
-        <h2>Pixar <em>Animation</em></h2>
-        <p>Pixar-style 3D animated shorts, consistent characters and AI spokespeople. A six-month production of more than 150 Pixar-style visuals taught me strict character consistency and cinematic quality.</p>
+        <h2>Pixar-Style <em>Animation</em></h2>
+        <p>We create captivating 3D animated shorts, episodic animated series, and animated adverts using advanced AI production tools. From character development to cinematic storytelling, we prioritize strict character consistency, ensuring every character maintains the same appearance, features, and personality across scenes and episodes. Every production is carefully crafted to bring stories and brands to life.</p>
       </div></div>
     </section>
     <section class="scene left">
-      <div class="amb"></div>
       <div class="vid"><video muted loop playsinline preload="none" data-src="assets/ugc-content.mp4"></video><div class="ph"><span>assets/ugc-content.mp4</span></div></div>
       <div class="wrap"><div class="scene-text">
         <div class="num" aria-hidden="true"><b data-f="03" data-n="03">03</b><span>of 04</span></div>
-        <h2>UGC <em>Content</em></h2>
-        <p>Realistic UGC-style ads with AI actors and product integration, complete with hooks and captions. No filming needed. The actor, the product and the room can all be AI.</p>
+        <h2>AI UGC <em>Content</em></h2>
+        <p>We create realistic UGC-style videos featuring AI-generated actors, seamless product integration, and engaging storytelling. From attention-grabbing hooks to captions and platform-ready edits, we produce authentic-looking content designed for TikTok, Instagram Reels, and other social platforms. No filming or physical actors required, all entirely with AI.</p>
       </div></div>
     </section>
     <section class="scene right">
-      <div class="amb"></div>
       <div class="vid"><video muted loop playsinline preload="none" data-src="assets/hypermotion-ads.mp4"></video><div class="ph"><span>assets/hypermotion-ads.mp4</span></div></div>
       <div class="wrap"><div class="scene-text">
         <div class="num" aria-hidden="true"><b data-f="04" data-n="04">04</b><span>of 04</span></div>
         <h2>Hypermotion <em>Ads</em></h2>
-        <p>High-energy hyper-motion product ads for Meta, TikTok and Reels. Fast camera moves, speed ramps and morphing product reveals that make people stop scrolling and look at your product.</p>
+        <p>We also create high-energy hypermotion product adverts for Meta, TikTok, Instagram Reels, and other digital platforms. Using dynamic camera movements, speed ramps, seamless transitions, and creative product morphing, we transform ordinary product showcases into visually striking commercials designed to stop the scroll, capture attention, and make your products stand out.</p>
       </div></div>
     </section>
   </div>
@@ -604,10 +615,16 @@ const PROJECTS = [
 const CAT_LABEL = {video:'AI Video', animation:'Animation', design:'Design & Branding'};
 
 const REVIEWS = [
+  {text:'Lumbani did an excellent job bringing our UGC video concept to life. The final video looked incredibly realistic, and the attention to detail was impressive. Communication was great throughout. Definitely recommend!'},
+  {text:'Working with Lumbani J. was a great experience. He understood our brand direction immediately and created a high-quality AI commercial that exceeded our expectations. Highly recommended!'},
+  {text:'Really impressed with the quality of work from DSNR. Their team understood our vision and produced an AI UGC video that looked professional and authentic. Great creativity and turnaround time.'},
+  {text:'The pacing, transitions, captions, and overall presentation were spot on. He understands what makes content engaging on TikTok and Reels.'},
+  {text:'Lumbani is more than just an AI video creator. His understanding of design, composition, and storytelling really sets his work apart.'},
   {text:'Lumbani did an excellent job redesigning my LinkedIn banner. He was very responsive, open to feedback, and willing to revise the initial concepts until we found the right direction. The final banner looks polished, modern, and fits my LinkedIn profile photo perfectly. I’m extremely happy with the final result and would definitely recommend Lumbani to anyone looking for a thoughtful and creative designer.'},
   {text:'Excellent experience working with this designer. Lumbani understood the vision immediately and delivered a professional, polished LinkedIn banner redesign incredibly fast. Everything was done right on the first try with minimal direction needed. Communication was smooth, turnaround was quick, and the final result exceeded expectations. Highly recommend, would absolutely work with Lumbani again.'},
   {text:'Lumbani is fast, punctual, reliable, and above all, he does an excellent job. I’m very pleased with the work he delivers!'},
   {text:'Lumbani was responsive and prompt. Happy to work with him again.'},
+  {text:'Very satisfied with Lumbani J.’s work.'},
 ];
 
 /* name, level %, glow colour, official logo file (assets/logos/), optional tile background and padding */
