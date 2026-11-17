@@ -168,6 +168,7 @@ main{position:relative}
 .sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(28px,4vw,48px)}
 .sec-head h2{font-size:clamp(28px,3.4vw,46px);margin-top:12px;max-width:16em}
 .sec>.wrap{position:relative}
+.scene.gridbg::before{z-index:0;-webkit-mask-image:radial-gradient(34% 58% at var(--gx) var(--gy),#000 0,transparent 72%);mask-image:radial-gradient(34% 58% at var(--gx) var(--gy),#000 0,transparent 72%)}
 .gridbg::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:var(--grid);background-size:84px 84px;
   -webkit-mask-image:radial-gradient(58% 72% at var(--gx,88%) var(--gy,18%),#000 0,transparent 70%);mask-image:radial-gradient(58% 72% at var(--gx,88%) var(--gy,18%),#000 0,transparent 70%)}
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
@@ -337,6 +338,7 @@ footer.site .soc svg{width:14px;height:14px}
 
 /* ---------- responsive ---------- */
 @media (max-width:980px){
+  .scene.gridbg::before{--gx:30%!important;--gy:80%!important;-webkit-mask-image:radial-gradient(80% 30% at var(--gx) var(--gy),#000 0,transparent 72%);mask-image:radial-gradient(80% 30% at var(--gx) var(--gy),#000 0,transparent 72%)}
   .nav .links{display:none}
   .hero-photo img{opacity:.5}
   .scene{align-items:flex-end;min-height:auto;padding:46vh 0 7vh}
@@ -403,7 +405,7 @@ footer.site .soc svg{width:14px;height:14px}
     <div class="wrap">
       <div class="hero-in">
         <div class="chip rise"><img src="assets/photo.jpg" alt=""><span>Jae<b>Designer</b><small>Founder &amp; Creative Director, DSNR</small></span></div>
-        <h1 class="rise d1"><span>Welcome to DSNR.</span><em>Where design craft meets AI.</em></h1>
+        <h1 class="rise d1"><span>DSNR.</span><em>Where design craft meets AI.</em></h1>
         <p class="lede rise d2">I'm Jae, the designer behind DSNR. I create AI video ads, UGC content, Pixar-style animation and brand design that make people stop, look and feel something.</p>
         <div class="cta rise d3">
           <span class="pair"><a class="btn upwork" href="https://www.upwork.com/freelancers/~01d9ba420fcd5097a8" target="_blank" rel="noopener">Hire on Upwork</a><a class="round" href="https://www.upwork.com/freelancers/~01d9ba420fcd5097a8" target="_blank" rel="noopener" aria-label="Hire on Upwork"><svg><use href="#i-arrow"/></svg></a></span>
@@ -423,7 +425,7 @@ footer.site .soc svg{width:14px;height:14px}
   <!-- ================= WHAT I DO (video scenes) =================
        Videos live in assets/ with these exact names. -->
   <div id="work">
-    <section class="scene left">
+    <section class="scene left gridbg" style="--gx:84%;--gy:50%">
       <div class="vid"><video muted loop playsinline preload="none" data-src="assets/ai-commercial-ads.mp4"></video><div class="ph"><span>assets/ai-commercial-ads.mp4</span></div></div>
       <div class="wrap"><div class="scene-text">
         <div class="num" aria-hidden="true"><b data-f="01" data-n="01">01</b><span>of 04</span></div>
@@ -431,7 +433,7 @@ footer.site .soc svg{width:14px;height:14px}
         <p>We create high-impact product ads, brand films, and short-form commercials using 100% AI-powered workflows. From concept development to final production, we combine advanced AI tools with professional art direction, visual storytelling, and creative refinement to produce captivating adverts designed to grab attention, elevate brands, and drive sales.</p>
       </div></div>
     </section>
-    <section class="scene right">
+    <section class="scene right gridbg" style="--gx:16%;--gy:50%">
       <div class="vid"><video muted loop playsinline preload="none" data-src="assets/pixar-animation.mp4"></video><div class="ph"><span>assets/pixar-animation.mp4</span></div></div>
       <div class="wrap"><div class="scene-text">
         <div class="num" aria-hidden="true"><b data-f="02" data-n="02">02</b><span>of 04</span></div>
@@ -439,7 +441,7 @@ footer.site .soc svg{width:14px;height:14px}
         <p>We create captivating 3D animated shorts, episodic animated series, and animated adverts using advanced AI production tools. From character development to cinematic storytelling, we prioritize strict character consistency, ensuring every character maintains the same appearance, features, and personality across scenes and episodes. Every production is carefully crafted to bring stories and brands to life.</p>
       </div></div>
     </section>
-    <section class="scene left">
+    <section class="scene left gridbg" style="--gx:84%;--gy:50%">
       <div class="vid"><video muted loop playsinline preload="none" data-src="assets/ugc-content.mp4"></video><div class="ph"><span>assets/ugc-content.mp4</span></div></div>
       <div class="wrap"><div class="scene-text">
         <div class="num" aria-hidden="true"><b data-f="03" data-n="03">03</b><span>of 04</span></div>
@@ -447,7 +449,7 @@ footer.site .soc svg{width:14px;height:14px}
         <p>We create realistic UGC-style videos featuring AI-generated actors, seamless product integration, and engaging storytelling. From attention-grabbing hooks to captions and platform-ready edits, we produce authentic-looking content designed for TikTok, Instagram Reels, and other social platforms. No filming or physical actors required, all entirely with AI.</p>
       </div></div>
     </section>
-    <section class="scene right">
+    <section class="scene right gridbg" style="--gx:16%;--gy:50%">
       <div class="vid"><video muted loop playsinline preload="none" data-src="assets/hypermotion-ads.mp4"></video><div class="ph"><span>assets/hypermotion-ads.mp4</span></div></div>
       <div class="wrap"><div class="scene-text">
         <div class="num" aria-hidden="true"><b data-f="04" data-n="04">04</b><span>of 04</span></div>
@@ -475,7 +477,7 @@ footer.site .soc svg{width:14px;height:14px}
   </section>
 
   <!-- ================= PROCESS ================= -->
-  <section class="sec" style="padding-top:0">
+  <section class="sec gridbg" style="padding-top:0;--gx:90%;--gy:40%">
     <div class="wrap">
       <div class="sec-head reveal"><div><div class="eyebrow">How it works</div><h2>Brief in. <em>Content out.</em></h2></div></div>
       <div class="steps">
@@ -497,7 +499,7 @@ footer.site .soc svg{width:14px;height:14px}
   </section>
 
   <!-- ================= ABOUT ================= -->
-  <section class="sec" id="about" style="padding-top:0">
+  <section class="sec gridbg" id="about" style="padding-top:0;--gx:94%;--gy:30%">
     <div class="wrap about">
       <div class="photo reveal">
         <div class="photo-in glow" id="photo">
