@@ -146,14 +146,6 @@ main{position:relative}
 .scene.right .vid{right:0}
 .scene.left .vid::after{background:var(--oy),linear-gradient(to right,var(--oside))}
 .scene.right .vid::after{background:var(--oy),linear-gradient(to left,var(--oside))}
-/* skewed frames echoing each video, drawn in the footage's own colour */
-.vid .skew{position:absolute;top:13%;bottom:13%;left:7%;width:50%;z-index:4;pointer-events:none;
-  border:1px solid color-mix(in srgb,var(--neon) 70%,transparent);transform:skewX(-9deg);
-  clip-path:inset(0 100% 0 0);transition:clip-path 1.5s var(--ease) .4s,border-color 1.4s linear}
-.vid .skew.b{border:1px dashed color-mix(in srgb,var(--neon) 34%,transparent);translate:22px 22px;transition-delay:.7s}
-.scene.right .vid .skew{left:auto;right:7%;transform:skewX(9deg);clip-path:inset(0 0 0 100%)}
-.scene.right .vid .skew.b{translate:-22px 22px}
-.scene.in .vid .skew{clip-path:inset(0 0 0 0)}
 /* fine scanlines so the footage shares the page's technical texture */
 .vid .lines{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.32;mix-blend-mode:multiply;
   background:repeating-linear-gradient(to bottom,transparent 0,transparent 2px,rgba(0,0,0,.5) 2px,rgba(0,0,0,.5) 3px)}
@@ -162,7 +154,6 @@ main{position:relative}
   .scene .vid.portrait::after{background:var(--oy),linear-gradient(to right,var(--oboth))}
   .scene.left .vid.portrait{left:max(0px,calc(28vw - var(--pw)/2))}
   .scene.right .vid.portrait{right:max(0px,calc(28vw - var(--pw)/2))}
-  .scene .vid.portrait .skew,.scene.right .vid.portrait .skew{left:14%;right:auto;width:72%}
 }
 .vid .ph{position:absolute;inset:0;display:none;align-items:center;justify-content:center}
 .vid.missing video{display:none}
@@ -365,7 +356,6 @@ footer.site .soc svg{width:14px;height:14px}
   .hero-photo img{opacity:.5}
   .scene{align-items:flex-end;min-height:auto;padding:46vh 0 7vh}
   .scene .vid,.scene.left .vid,.scene.right .vid{width:100%;left:0;right:0;bottom:auto;height:56vh}
-  .scene .vid .skew,.scene.right .vid .skew{left:9%;right:auto;width:82%;top:16%;bottom:34%}
   .scene .vid::after,.scene.left .vid::after,.scene.right .vid::after{background:linear-gradient(to bottom,var(--bg) 0,rgba(19,19,21,.5) 7%,rgba(19,19,21,0) 16%,rgba(19,19,21,0) 42%,rgba(19,19,21,.28) 58%,rgba(19,19,21,.68) 76%,rgba(19,19,21,.92) 91%,var(--bg) 100%)}
   .num{font-size:92px}
   .scene-text{width:100%}
@@ -382,7 +372,6 @@ footer.site .soc svg{width:14px;height:14px}
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .scrollcue{animation:none}
-  .vid .skew{clip-path:none!important;transition:none}
   .reveal,.rise,.card,.scene .vid,.scene .scene-text,.pw-item,.review.reveal:nth-child(n){opacity:1;transform:none;transition:none;animation:none}
   .stars svg{opacity:1;transform:none;transition:none}
 }
@@ -430,7 +419,7 @@ footer.site .soc svg{width:14px;height:14px}
       <div class="hero-in">
         <div class="chip rise"><img src="assets/photo.jpg" alt=""><span>Jae<b>Designer</b><small>Founder &amp; Creative Director, DSNR</small></span></div>
         <h1 class="rise d1"><span>DSNR.</span><em>Where design craft meets AI.</em></h1>
-        <p class="lede rise d2">I'm Jae, a graphic designer with 9+ years of visual design experience, now creating with AI. I produce AI video ads, UGC content and Pixar-style animation, and I design logos, brand identities, social media graphics and ad creatives that make people stop, look and feel something.</p>
+        <p class="lede rise d2">I'm Jae, founder and creative director of DSNR, with 9+ years of visual design experience. I create AI video ads, UGC content, Pixar-style animation and graphic design that make people stop, look and feel something.</p>
         <div class="cta rise d3">
           <span class="pair"><a class="btn upwork" href="https://www.upwork.com/freelancers/~01d9ba420fcd5097a8" target="_blank" rel="noopener">Hire on Upwork</a><a class="round" href="https://www.upwork.com/freelancers/~01d9ba420fcd5097a8" target="_blank" rel="noopener" aria-label="Hire on Upwork"><svg><use href="#i-arrow"/></svg></a></span>
           <a class="btn linkedin" href="https://www.linkedin.com/in/lumbani-jere-" target="_blank" rel="noopener">View LinkedIn profile</a>
@@ -776,7 +765,7 @@ $$('.reveal').forEach(el => revealIO.observe(el));
 /* ---------- video scenes: video and text arrive together; glow follows the footage ---------- */
 const scenes = $$('.scene').map(el => {
   const vid = $('.vid', el), video = $('video', el);
-  vid.insertAdjacentHTML('beforeend', '<i class="lines"></i><i class="skew"></i><i class="skew b"></i>');
+  vid.insertAdjacentHTML('beforeend', '<i class="lines"></i>');
   const s = {el, vid, video, num:$('.num b', el), on:false, ok:false, loaded:false};
   video.addEventListener('error', () => vid.classList.add('missing'));
   video.addEventListener('loadeddata', () => { s.ok = true; if (video.videoHeight > video.videoWidth) vid.classList.add('portrait'); if (s.on) video.play().catch(() => {}); });
